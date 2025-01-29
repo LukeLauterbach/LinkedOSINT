@@ -22,9 +22,15 @@ def main(company="", email_format="{first}.{last}", debug=False):
     users = parse_users(users)
     users = format_users(users, email_format)
 
+    print_output(users)
+
+
+def print_output(users):
     print("\nEmail Addresses Found:")
     for user in users:
         print(user['email'])
+
+    print(f"\n{len(users)} users found on Linked.")
 
 
 def parse_arguments():
