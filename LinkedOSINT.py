@@ -45,7 +45,7 @@ def print_output(users):
     for user in users:
         print(user['email'])
 
-    print(f"\n{len(users)} users found on Linked.")
+    print(f"\n{len(users)} users found on LinkedIn.")
 
 
 def parse_arguments():
