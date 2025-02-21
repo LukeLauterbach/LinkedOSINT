@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]  # Assuming setuptools is already installed
+
+[project]
+name = "LinkedOSINT"
+version = "1.0"
+description = "A reconnaissance tool designed to pull the names of employees from LinkedIn, utilizing Selenium to scrape Google results."
+authors = [
+    { name = "Luke Lauterbach", email = "llauterbach@sentinel.com" }
+]
+dependencies = [
+    "seleniumbase"
+]
+requires-python = ">=3.7"
+
+[project.scripts]
+linkedosint = "LinkedOSINT:main"

@@ -1,6 +1,6 @@
 import argparse
 from seleniumbase import SB
-from seleniumbase.common.exceptions import ElementNotVisibleException
+from seleniumbase.common.exceptions import ElementNotVisibleException, NoSuchElementException
 import json
 import re
 
@@ -12,17 +12,32 @@ def main(company="", email_format="{first}.{last}", debug=False):
         company = input("Please enter the company name: ").strip()
 
     if not debug:  # Only perform the search if debug mode is disabled. Otherwise, just used cached data.
-        users = get_results_from_google(company)
+        users = get_results_from_google(company)  # Returns a dict with 'raw' and 'url'. Raw is the name,URL is to LnkIn
         with open(f'{company}-LinkedInUsers.json', 'w') as json_file:
             json.dump(users, json_file, indent=4)
 
+    # Write what we found to disk
     with open(f'{company}-LinkedInUsers.json', 'r') as json_file:
         users = json.load(json_file)
 
-    users = parse_users(users)
-    users = format_users(users, email_format)
+    users = parse_users(users)  # Get rid of weird things in people's names (e.g. John Doe, DDS).
+    #  At this point, users is a dict with 'raw' (raw name), 'url' (to LinkedIn), 'fullname' (their name, formatted),
+    #   'firstname', and 'lastname'
+    users = format_users(users, email_format)  # Turn names into the email addresses. Will add 'email' to the dict.
 
     print_output(users)
+
+    # If used by another script, return all of the users in a list, instead of a dict that contains unneeded data
+    email_list = convert_users_to_list(users)
+    return email_list
+
+
+def convert_users_to_list(users):
+    email_list = []
+    for user in users:
+        email_list.append(user['email'].lower())
+
+    return email_list
 
 
 def print_output(users):
@@ -36,7 +51,8 @@ def print_output(users):
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--company", help="Company name")
-    parser.add_argument("-e", "--email_format", default="{first}.{last}", help="Email Format")
+    parser.add_argument("-e", "--email_format", default="{first}.{last}",
+                        help="Email Format. Defaults to {first}.{last}. Example: {f}{last}@EXAMPLE.COM")
     parser.add_argument("-d", "--debug", action="store_true", help="Debug Mode")
 
     args = parser.parse_args()
@@ -54,6 +70,7 @@ def format_users(users, email_format):
     return users
 
 
+# People put weird things in their LinkedIn names. This fucntion is intended to remove those weird things.
 def parse_users(users):
     for i in range(len(users)):
         users[i]['full_name'] = users[i]['raw'].split("-")[0].strip()  # Get rid of the company name and the title
@@ -84,6 +101,9 @@ def get_results_from_google(company=""):
                 sb.wait_for_element("div#search")
             except ElementNotVisibleException:
                 break
+            except NoSuchElementException:
+                print(f"Could not load the Google results. This could be a CAPCHA issue.")
+                return users
 
             results = sb.find_elements("div.tF2Cxc")  # Google's search result container
 
