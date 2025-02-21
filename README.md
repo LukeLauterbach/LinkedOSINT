@@ -1,4 +1,4 @@
-<center><img src="icon.png" width="150" height="150" /></center>
+<p align="center"><img src="icon.png" width="150" height="150" /></p>
 
 There are many tools for scraping usernames from LinkedIn. However, many of them result in bans from LinkedIn or try to pull information from Google without success. LinkedOSINT is built with Selenium, a browser automation framework, to scrape results from Google.
 
