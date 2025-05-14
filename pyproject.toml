@@ -9,6 +9,7 @@ authors = [
     { name = "Luke Lauterbach", email = "llauterbach@sentinel.com" }
 ]
 dependencies = [
+    "selenium",
     "seleniumbase"
 ]
 requires-python = ">=3.7"

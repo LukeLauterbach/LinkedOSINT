@@ -19,3 +19,12 @@ pip install -r requirements.txt
 ```python
 linkedosint -c "Example Company, Inc" -e "{f}{last}@example.com"
 ```
+## Risky Mode
+By default, LinkedOSINT scrapes results from LinkedIn. This doesn't cary much risk to it. At worst, Google might throw CAPCHAs your way for a few hours. However, sometimes company names make it hard to find results on Google (e.g. "Smith Inc" is going to return a lot of results for people with the last name Smith). 
+LinkedOSINT offers an optional "Risky" mode, which allows you to directly log into LinkedIn with your credentials and scrape the Employees pages of an organization's LinkedIn page. This automated behavior may result in a ban on LinkedIn.
+### Risky Mode - Required Arguments
+* `-rurl` - The URL of the organization's first Employees page (for example: https://www.linkedin.com/search/results/people/?currentCompany=%5B%2213562%22%5D&origin=COMPANY_PAGE_CANNED_SEARCH&sid=Yvg)
+* `-ru` - Username of your LinkedIn account
+* `-rp` - Password of your LinkedIn account.
+
+I am not responsible if Risky mode gets you banned from LinkedIn. 
