@@ -10,7 +10,8 @@ authors = [
 ]
 dependencies = [
     "selenium",
-    "seleniumbase"
+    "seleniumbase",
+    "patchright"
 ]
 requires-python = ">=3.7"
 
