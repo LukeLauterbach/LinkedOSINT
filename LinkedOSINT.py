@@ -16,6 +16,8 @@ from os import getenv
 import requests
 from time import sleep
 
+GOOGLE_CAPTCHA_TIMEOUT_MS = 60000
+
 
 def main(company="", email_format="{first}.{last}", debug=False, risky_url="", risky_username="", risky_password="", brave_api_key="", brave_max=100):
     if not company:
@@ -256,6 +258,8 @@ def get_results_from_google(company=""):
     users = []
     with sync_playwright() as playwright:
         browser, context, page = initialize_playwright(playwright)
+        page.set_default_timeout(GOOGLE_CAPTCHA_TIMEOUT_MS)
+        page.set_default_navigation_timeout(GOOGLE_CAPTCHA_TIMEOUT_MS)
         page.goto(
             f"https://www.google.com/search?q=site:linkedin.com/in+%22{company}%22&udm=14")
 
